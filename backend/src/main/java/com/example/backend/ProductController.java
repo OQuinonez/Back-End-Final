@@ -8,16 +8,14 @@ import java.util.List;
 
 @RestController
 public class ProductController {
-    @CrossOrigin();
-
+    @CrossOrigin()
     @GetMapping("/products")
 
     public List<Product> all() {
-        return Products.all();
+        return Product.all();
     }
 
-    @CrossOrigin();
-
+    @CrossOrigin()
     @PostMapping("/products/new")
     public Products newProduct(@RequestParam Products product){
         Products.create(product);
