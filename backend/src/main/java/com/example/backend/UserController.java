@@ -9,6 +9,11 @@ public class UserController {
     public static void DisplayUserInfo(Integer UserID){
         try {
             Connection con = Connect.LoadDB();
-        } catch ()
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM Users");
+            ResultSet resultSet = statement.executeQuery();
+
+        } catch (SQLException exception){
+            System.out.println(exception.getMessage());
+        }
     }
 }
