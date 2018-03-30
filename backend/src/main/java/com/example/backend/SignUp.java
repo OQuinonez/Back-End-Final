@@ -4,5 +4,5 @@ public class SignUp {
     public String UserName;
     public String UAddress;
     public String Email;
-    public String HashCode;
+    public String pass_word;
 }
