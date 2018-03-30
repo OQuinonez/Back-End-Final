@@ -110,7 +110,12 @@ public class UserRepository {
             con.close();
             resultSet.getString(email);
             resultSet.getString(password);
-        } catch (SQLException e){
+            return new User(resultSet.getInt("UserId"),resultSet.getString("UserName"),
+                    resultSet.getString("UAddress"),
+                    resultSet.getString("Email"),
+                    resultSet.getString("HashCode"),
+                    resultSet.getString("session_key"));
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
         }
