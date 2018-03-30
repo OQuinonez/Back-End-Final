@@ -15,9 +15,4 @@ public class Product {
         this.Quantity = Quantity;
         this.PicAddress = PicAddress;
     }
-
-    @Override
-    public String toString() {
-        return "Item Name(" + ItemName + ")";
-    }
 }
