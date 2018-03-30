@@ -11,7 +11,7 @@ public class LogInController {
     @Value("${app.salt}")
     private String salt;
     @CrossOrigin(allowedHeaders="*",allowCredentials="true")
-    @PostMapping("/LogIn")
+    @PostMapping("/LogIn/")
     public User logIn(@RequestParam SignUp newUser){
         String hashedPassword = BCrypt.hashpw(newUser.pass_word, salt);
         String alphabet= "abcdefghijklmnopqrstuvwxyz";
@@ -22,8 +22,7 @@ public class LogInController {
             char c = alphabet.charAt(random.nextInt(26));
             sessionKey+=c;
         }
-        User newMember = UserRepository.CreatingUser(newUser.UserName,
-                newUser.UAddress, newUser.Email,
+        User newMember = UserRepository.existingUser(newUser.Email,
                 hashedPassword, sessionKey);
         if(newMember != null){
             return newMember;
