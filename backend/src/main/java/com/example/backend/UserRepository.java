@@ -74,32 +74,50 @@ public class UserRepository {
         }
     }
 
-    public static User isUser(String Email, String pass_word){
+    public static User isUser(String sessionKey, String Email, String pass_word){
         try {
             Connection con = Connect.LoadDB();
             PreparedStatement statement = con.prepareStatement(
-                    "UPDATE Users WHERE Email = ? and pass_word = ? returning *"
+                    "UPDATE Users SET sessionKey = ? WHERE UserName = ? and pass_word = ? returning *"
             );
-            statement.setString(1,Email);
-            statement.setString(2,pass_word);
+            statement.setString(1,sessionKey);
+            statement.setString(2,Email);
+            statement.setString(3,pass_word);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             con.close();
-            return new User(resultSet.getInt("UserId"),resultSet.getString("UserName"),
+            return new User(resultSet.getInt("UserId"),
+                    resultSet.getString("UserName"),
                     resultSet.getString("UAddress"),
-                    resultSet.getString("Email"),
-                    resultSet.getString("HashCode"),
-                    resultSet.getString("session_key"));
+                    Email,
+                    pass_word,
+                    sessionKey);
         }
         catch (SQLException e){
             return null;
         }
     }
 
-    public static User existingUser(String email, String password, String session_key) {
+    public static boolean updateSessionKey(String Email){
         try {
             Connection con = Connect.LoadDB();
-            PreparedStatement statement = con.prepareStatement("UPDATE student SET session_key = ? WHERE email = ? and p_word = ? RETURNING *");
+            PreparedStatement preparedStatement = con.prepareStatement(
+                    "UPDATE Users SET sessionKey = null WHERE Email = ? RETURNING *");
+            preparedStatement.setString(1, Email);
+            preparedStatement.executeQuery();
+            con.close();
+            return true;
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public static User existingUser(String session_key, String email, String password) {
+        try {
+            Connection con = Connect.LoadDB();
+            PreparedStatement statement = con.prepareStatement("UPDATE users SET sessionKey = ? WHERE email = ? and pass_word = ? RETURNING *");
             statement.setString(1, session_key);
             statement.setString(2, email);
             statement.setString(3, password);
@@ -110,11 +128,12 @@ public class UserRepository {
             con.close();
             resultSet.getString(email);
             resultSet.getString(password);
-            return new User(resultSet.getInt("UserId"),resultSet.getString("UserName"),
+            return new User(resultSet.getInt("UserId"),
+                    resultSet.getString("UserName"),
                     resultSet.getString("UAddress"),
-                    resultSet.getString("Email"),
-                    resultSet.getString("HashCode"),
-                    resultSet.getString("session_key"));
+                    email,
+                    password,
+                    session_key);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
