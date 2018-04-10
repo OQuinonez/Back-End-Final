@@ -11,6 +11,17 @@ import java.util.Random;
 public class SignUpController {
     @Value("${app.salt}")
     private String salt;
+    String createSessionKey() {
+        String alphabet= "abcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*();[]{}\\|,./<>?`~-=_+";
+        String sessionKey = "";
+        Random random = new Random();
+        int randomLen = 12+random.nextInt(9);
+        for (int i = 0; i < randomLen; i++) {
+            char c = alphabet.charAt(random.nextInt(26));
+            sessionKey+=c;
+        }
+        return sessionKey;
+    }
     @CrossOrigin
     @PostMapping("/SignUp")
     public User signUp(@RequestBody SignUp newUser){
