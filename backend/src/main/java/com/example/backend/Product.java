@@ -1,6 +1,7 @@
 package com.example.backend;
 
 public class Product {
+    public Integer ItemID;
     public String ItemName;
     public String Category;
     public Double Price;
@@ -9,7 +10,8 @@ public class Product {
 
     public Product(){}
 
-    public Product(String ItemName, String Category, Double Price, Integer Quantity, String PicAddress){
+    public Product(Integer ItemId, String ItemName, String Category, Double Price, Integer Quantity, String PicAddress){
+        this.ItemID = ItemId;
         this.ItemName = ItemName;
         this.Category = Category;
         this.Price = Price;
