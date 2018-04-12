@@ -14,18 +14,13 @@ public class LogInController {
     @CrossOrigin
     @PostMapping("/login")
     public User logIn(@RequestBody LogIn currentUser) {
-        System.out.println(currentUser.email);
-        System.out.println(currentUser.password);
         String hashedPassword = BCrypt.hashpw(currentUser.password, salt);
         String sessionKey = new SignUpController().createSessionKey();
-        User newMember = UserRepository.existingUser(currentUser.email, hashedPassword, sessionKey);
-        System.out.println(currentUser.email);
-        System.out.println(hashedPassword);
-        System.out.println(sessionKey);
+        User newMember = UserRepository.existingUser(sessionKey, currentUser.email, hashedPassword);
         if (newMember != null) {
             return newMember;
         } else {
-            System.out.println("Something went Wrong!");
+            System.out.println("Something went Wrong With LOGIN!");
             return null;
         }
     }
