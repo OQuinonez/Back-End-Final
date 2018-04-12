@@ -7,6 +7,7 @@ public class Product {
     public Integer Quantity;
     public String PicAddress;
 
+    public Product(){}
 
     public Product(String ItemName, String Category, Double Price, Integer Quantity, String PicAddress){
         this.ItemName = ItemName;
