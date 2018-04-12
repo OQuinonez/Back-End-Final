@@ -117,7 +117,7 @@ public class UserRepository {
     public static User existingUser(String session_key, String email, String password) {
         try {
             Connection con = Connect.LoadDB();
-            PreparedStatement statement = con.prepareStatement("UPDATE users SET sessionKey = ? WHERE email = ? and pass_word = ? RETURNING *");
+            PreparedStatement statement = con.prepareStatement("UPDATE users SET sessionKey = ? WHERE users.email = ? and pass_word = ? RETURNING *");
             statement.setString(1, session_key);
             statement.setString(2, email);
             statement.setString(3, password);
@@ -126,8 +126,6 @@ public class UserRepository {
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             con.close();
-            resultSet.getString(email);
-            resultSet.getString(password);
             return new User(resultSet.getInt("UserId"),
                     resultSet.getString("UserName"),
                     resultSet.getString("UAddress"),
