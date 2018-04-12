@@ -17,6 +17,7 @@ public class ProductRepository {
             ArrayList<Product> items = new ArrayList<Product>();
             while (resultSet.next()) {
                 items.add(new Product(
+                        resultSet.getInt("ItemID"),
                         resultSet.getString("ItemName"),
                         resultSet.getString("Category"),
                         resultSet.getDouble("Price"),
@@ -36,14 +37,34 @@ public class ProductRepository {
         }
     }
 
-    public static boolean deleteUser(String Email, String Password){
+    public static Product SellProduct(String ItemName, String Category, Double Price, Integer Quantity, String PicAddress){
+        try {
+            Connection con = Connect.LoadDB();
+            PreparedStatement statement = con.prepareStatement(
+                    "INSERT INTO Products (ItemName, Category, Price, Quantity, PicAddress) VALUES (?, ?, ?, ?, ?) RETURNING *");
+            statement.setString(1, ItemName);
+            statement.setString(2,Category);
+            statement.setDouble(3,Price);
+            statement.setInt(4, Quantity);
+            statement.setString(5, PicAddress);
+            ResultSet result = statement.executeQuery();
+            result.next();
+            return new Product(result.getInt("ItemID"), result.getString("ItemName"),
+                    result.getString("Category"), result.getDouble("Price"), result.getInt("Quantity"), result.getString("PicAddress"));
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static boolean deleteProduct(Integer ItemID){
         try {
             Connection con = Connect.LoadDB();
             PreparedStatement preparedStatement = con.prepareStatement(
-                    "DELETE FROM Products WHERE id = ?"
+                    "DELETE FROM Products WHERE ItemID = ?"
             );
-            preparedStatement.setString(1, Email);
-            preparedStatement.setString(2,Password);
+            preparedStatement.setInt(1, ItemID);
             preparedStatement.execute();
             con.close();
             return true;
