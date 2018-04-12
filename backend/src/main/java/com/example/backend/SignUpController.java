@@ -25,11 +25,6 @@ public class SignUpController {
     @CrossOrigin
     @PostMapping("/SignUp")
     public User signUp(@RequestBody SignUp newUser){
-        System.out.println(newUser.UserName);
-        System.out.println(newUser.Email);
-        System.out.println(newUser.pass_word);
-        System.out.println(newUser.UAddress);
-
         String hashedPassword = BCrypt.hashpw(newUser.pass_word, salt);
         String alphabet= "abcdefghijklmnopqrstuvwxyz";
         String sessionKey = "";
