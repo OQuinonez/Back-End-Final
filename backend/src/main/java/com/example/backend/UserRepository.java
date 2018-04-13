@@ -114,27 +114,27 @@ public class UserRepository {
         }
     }
 
-    public static User existingUser(String session_key, String email, String password) {
+    public static Boolean existingUser(String session_key, String email, String password) {
         try {
             Connection con = Connect.LoadDB();
             PreparedStatement statement = con.prepareStatement("UPDATE users SET sessionKey = ? WHERE users.email = ? and pass_word = ? RETURNING *");
-            statement.setString(1, session_key);
-            statement.setString(2, email);
-            statement.setString(3, password);
+            statement.setString(1, email);
             System.out.println(email);
             System.out.println(password);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
             con.close();
-            return new User(resultSet.getInt("UserId"),
-                    resultSet.getString("UserName"),
-                    resultSet.getString("UAddress"),
-                    email,
-                    password,
-                    session_key);
+            System.out.println("Logged out works!");
+            return true;
+//                    new User(resultSet.getInt("UserId"),
+//                    resultSet.getString("UserName"),
+//                    resultSet.getString("UAddress"),
+//                    email,
+//                    password,
+//                    session_key);
         } catch (SQLException e) {
+            System.out.println("Logged out unsuccefull");
             System.out.println(e.getMessage());
-            return null;
+            return false;
         }
     }
 
