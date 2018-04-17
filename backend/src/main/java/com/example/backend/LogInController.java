@@ -13,10 +13,13 @@ public class LogInController {
     private String salt;
     @CrossOrigin
     @PostMapping("/login")
-    public Boolean logIn(@RequestBody LogIn currentUser) {
+    public User logIn(@RequestBody LogIn currentUser) {
         String hashedPassword = BCrypt.hashpw(currentUser.password, salt);
         String sessionKey = new SignUpController().createSessionKey();
-        Boolean newMember = UserRepository.existingUser(sessionKey, currentUser.email, hashedPassword);
+        User newMember = UserRepository.existingUser(
+                sessionKey,
+                currentUser.email,
+                hashedPassword);
         if (newMember != null) {
             System.out.println("No Worries, LoggIn works");
             return newMember;
