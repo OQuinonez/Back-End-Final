@@ -11,7 +11,7 @@ public class ProductRepository {
     public static ArrayList<Product> allProducts() {
         try {
             Connection con = Connect.LoadDB();
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM Products");
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM Products Order by ItemId DESC");
             ResultSet resultSet = statement.executeQuery();
             System.out.println(resultSet);
             ArrayList<Product> items = new ArrayList<Product>();
